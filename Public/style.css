@@ -1,0 +1,40 @@
+/* Reset default margin and padding for all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+}
+
+/* Body styles */
+body {
+    font-family: palatino, sans-serif; /* Set default font family */
+    background-color: rgb(213, 222, 250); /* Set background color */
+    color: #000000; /* Set text color */
+    line-height: 1.6; /* Set line height for readability */
+    text-align: center;
+}
+
+/* Header styles */
+header {
+    background-color:  rgb(213, 222, 250); /* Set background color */
+    color: #352f2f; /* Set text color */
+    padding: 20px; /* Add padding */
+    text-align: center; /* Center-align text */
+}
+
+/* Main content styles */
+main {
+    padding: 20px; /* Add padding */
+}
+
+/* Footer styles */
+footer {
+    background-color: #333; /* Set background color */
+    color: #fff; /* Set text color */
+    padding: 20px; /* Add padding */
+    text-align: center; /* Center-align text */
+}
+
+
+
+
