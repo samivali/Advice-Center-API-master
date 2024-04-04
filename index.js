@@ -2,19 +2,20 @@ const express = require('express');
 const fs =require('fs');
 const bodyParser = require(`body-parser`);
 const app = express();
-const sqlite = require(`sqlite3`).verbose();
+const sqlite3 = require(`sqlite3`).verbose();
 const multer = require(`multer`);
 // const dbModule = require(`/dbModule.js`);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.static(__dirname + `/Public`))
 
 // dbModule.initializeDatabase();
 
 
 
 
-const homeSite = '/Users/samanthavaliente/Desktop/Advice-Center-API/Public/HomeSite.html'
+const homeSite = '/Users/samanthavaliente/Desktop/Advice-Center-API-master/Public/HomeSite.html'
 //PORT
 const port = process.env.PORT || 3000;
 
@@ -27,7 +28,7 @@ app.use(express.static('Public', {
     }
 }));
 
-const db = new sqlite.Database('./Comments.db', (err) => {
+const db = new sqlite3.Database('./Comments.db', (err) => {
     if (err) {
         console.error('Error opening database:', err.message);
     } else {
@@ -52,6 +53,15 @@ const db = new sqlite.Database('./Comments.db', (err) => {
 
 //POST REQUEST
 app.post("/comment", (req, res) => {
+    fs.readFile(`/Users/samanthavaliente/Desktop/Advice-Center-API-master/Public/comments.html`, function(error, data){
+        if(error){
+            res.writeHead(404, 'Error: File Not Found')
+        }else{
+            res.write(data)
+        }
+        res.end()
+    });
+
     console.log(req.body);
     console.log("Content-Type:", req.get('Content-Type'));
     const comment = req.body.comment;
@@ -63,11 +73,7 @@ app.post("/comment", (req, res) => {
         if (err) {
             console.error(`Error inserting comment`, err);
             res.status(500).send(`Internal server error`);
-        } else {
-            
-            console.log(`Comment Under Review`);
-            res.send('Comment submitted successfully');
-        }
+        } 
     });
 });
 
@@ -87,26 +93,6 @@ app.get('/', (req,res) => {
 });
 
 
-
-
-// app.get('/classRecs', (req,res) =>{
-//     res.send('hello World!!!')
-// })
-
-// app.get('/classRecs/:name',(req,res) =>{
-//     let rec = recs.find(c=> c.name === req.params.name);
-//     if(!rec) res.status(404).send('this class is not avalible')
-//     res.send(rec);
-// })
-
-// app.post('/classRecs', (req,res) => {
-//     const rec = {
-//         id: recs.length +1,
-//         name: req.body.name
-//     }
-//     recs.push(rec);
-//     res.send(recs);
-// });
 
 
 
