@@ -4,9 +4,12 @@ const bodyParser = require(`body-parser`);
 const app = express();
 const sqlite = require(`sqlite3`).verbose();
 const multer = require(`multer`);
+// const dbModule = require(`/dbModule.js`);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// dbModule.initializeDatabase();
 
 
 
@@ -24,14 +27,6 @@ app.use(express.static('Public', {
     }
 }));
 
-//Test data
-// const recs =[
-//     {id: 1, name: 'science'},
-//     {id: 2, name: 'history'},
-//     {id: 3, name: 'art'},
-// ];
-// //
-
 const db = new sqlite.Database('./Comments.db', (err) => {
     if (err) {
         console.error('Error opening database:', err.message);
@@ -42,7 +37,7 @@ const db = new sqlite.Database('./Comments.db', (err) => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             comment STRING,
             email STRING,
-            respondedTo Boolean)`, (err) => {
+            response STRING)`, (err) => {
             if (err) {
                 console.error('Error creating table:', err.message);
             } else {
@@ -51,6 +46,7 @@ const db = new sqlite.Database('./Comments.db', (err) => {
         });
     }
 });
+
 
 
 
@@ -114,6 +110,8 @@ app.get('/', (req,res) => {
 
 
 
+app.listen(
+    port, 
+    () => console.log(`its alive on http://localhost:${port}`)
 
-
-app.listen(port,()=> console.log(`listening on port ${port}`))
+    )
