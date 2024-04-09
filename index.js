@@ -4,13 +4,13 @@ const bodyParser = require(`body-parser`);
 const app = express();
 const sqlite3 = require(`sqlite3`).verbose();
 const multer = require(`multer`);
-// const dbModule = require(`/dbModule.js`);
+const dbModule = require(`./Server/dbModule.js`);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + `/Public`))
 
-// dbModule.initializeDatabase();
+//dbModule.initializeDatabase();
 
 
 
@@ -38,7 +38,8 @@ const db = new sqlite3.Database('./Comments.db', (err) => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             comment STRING,
             email STRING,
-            response STRING)`, (err) => {
+            response STRING
+            )`, (err) => {
             if (err) {
                 console.error('Error creating table:', err.message);
             } else {
@@ -76,7 +77,22 @@ app.post("/comment", (req, res) => {
         } 
     });
 });
+////
 
+
+
+// //why is it infinetly restarting the server due to changes
+// db.all(`SELECT comment, response FROM comments`, [], (err, rows) => {
+//     const jsonData = JSON.stringify(rows, null, 2);
+//     fs.writeFile( `/Data/data.json`, jsonData, (err) => {
+//         if(err){
+//             console.log(`error writing JSON file:`, err.message)
+//         } else{
+    
+//             console.log(`JSON data written to data.json`);
+//         }
+//     });
+// });
 
 
 
@@ -92,12 +108,14 @@ app.get('/', (req,res) => {
     })
 });
 
+const  server = app.listen(port, () => console.log(`its alive on http://localhost:${port}`));
 
-
-
-
-app.listen(
-    port, 
-    () => console.log(`its alive on http://localhost:${port}`)
-
-    )
+server.on('close', () => {
+    db.close((err)=>{
+        if(err){
+            console.error('Error closeing database:', err.message);
+        } else{
+            console.log('Database closed');
+        }
+    })
+})
