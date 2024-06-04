@@ -95,7 +95,7 @@ app.post("/comment", (req, res) => {
 // });
 
 
-
+//forms initial website address, writes the html file to the website if no errors
 app.get('/', (req,res) => {
     fs.readFile(homeSite, function(error, data) {
         if(error){
@@ -108,8 +108,10 @@ app.get('/', (req,res) => {
     })
 });
 
+//startes the server, logs to console to tell where its being run on computer
 const  server = app.listen(port, () => console.log(`its alive on http://localhost:${port}`));
 
+//closes database when server is ended
 server.on('close', () => {
     db.close((err)=>{
         if(err){
